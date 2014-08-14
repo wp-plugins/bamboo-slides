@@ -1,4 +1,4 @@
-=== Bamboo Sildes ===
+=== Bamboo Slides ===
 Contributors: Bamboo Solutions
 Donate link: http://www.bamboosolutions.co.uk
 Tags: slides, sliders, banners, slideshows, shortcodes
