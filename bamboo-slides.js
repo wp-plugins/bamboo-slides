@@ -108,6 +108,7 @@
 				}
 				bambooSlidesNextAnimationIn(index);
 			}
+			bambooSlidesUpdateIndicators(index);
 			bambooSliding[index] = false;
 
 		}
@@ -127,7 +128,29 @@
 					bambooCurrentSlide[index] = bambooSlideCount[index];
 			}
 			bambooSlidesPrevAnimationIn(index);
+			bambooSlidesUpdateIndicators(index);
 			bambooSliding[index] = false;
+		}
+
+	}
+
+/******************************************************************/
+
+	function bambooSlidesUpdateIndicators(index) {
+
+		var indicators = jQuery('.bamboo-slides-indicators');
+		if(indicators.length>0) {
+			indicators = jQuery(indicators[0]);
+			var output = '';
+			for (var i = 1; i <= bambooSlideCount[index]; i++) {
+				if(i==bambooCurrentSlide[index]) {
+					output+='<i class="fa fa-circle"></i>';
+				} else {
+					output+='<i class="fa fa-circle-o"></i>';
+				}
+			};
+			indicators.html(output);
+
 		}
 
 	}
@@ -167,7 +190,6 @@
 		var slide = jQuery('.bamboo-slides').eq(index).children('.bamboo-slide').eq(bambooCurrentSlide[index]-1);
 		var slideWidth = jQuery('.bamboo-slides').eq(index).width();
 		var slideHeight = slide.height();
-console.log(bambooSlideMode[index]);
 
 		slide.parent().stop(true, false).velocity({'height': slideHeight}, 0);
 

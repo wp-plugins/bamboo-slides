@@ -4,7 +4,7 @@ Donate link: http://www.bamboosolutions.co.uk
 Tags: slides, sliders, banners, slideshows, shortcodes
 Requires at least: 3.0.1
 Tested up to: 3.9.2
-Stable tag: 1.5
+Stable tag: 1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,7 +20,7 @@ Usage
 
 Insert the ’bamboo-slides’ shortcode into your content as follows:
 
-    [bamboo-slides group=homepage slides timer=4 buttons=on  mode=fade]
+    [bamboo-slides group=homepage slides timer=4 buttons=on indicators=on mode=fade]
 
 All of the attributes are optional, with the following possible values:
 
@@ -31,7 +31,10 @@ timer
 Number of seconds to wait between each slide, if set to 0 the slides will only change when the buttons are used
 
 buttons
-If this is set to anything other than on then the slides will not have any buttons and the slides will only advance using the timer
+If this is set then the slides will have buttons enabling the user to advance the slides manually
+
+indicators
+If this is set then the slides will have indicators at the bottom indicating the current slide
 
 mode
 switch		Simple switch from one slide to next

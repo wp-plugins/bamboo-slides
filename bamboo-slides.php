@@ -5,7 +5,7 @@ Plugin Name:	Bamboo Slides
 Plugin URI:  http://www.bamboosolutions.co.uk/wordpress/bamboo-slides
 Author:      	Bamboo Solutions
 Author URI:	http://www.bamboosolutions.co.uk
-Version:     1.5
+Version:     1.6
 Description: With three different animation styles, Bamboo Slides allows you to incorporate a cool looking interactive banner or slideshow into any page – no coding or Flash required.
 */
 /******************************************************************/
@@ -99,6 +99,9 @@ Description: With three different animation styles, Bamboo Slides allows you to 
 		$start = "1";
 		if ( isset( $atts["start"] ) ) $start = $atts["start"];
 
+		$indicators = false;
+		if ( isset( $atts["indicators"] ) ) $indicators = true;
+
 		// PROVIDE AN ACTION HOOK DIRECTLY BEFORE THE SLIDES
 		do_action( 'before_bamboo_slides' );
 
@@ -122,6 +125,7 @@ Description: With three different animation styles, Bamboo Slides allows you to 
 			$background = '';
 			if( has_post_thumbnail( $id ) ) {
 				$url = wp_get_attachment_image_src( get_post_thumbnail_id( $id ), 'single-post-thumbnail' );
+				$url = str_replace( home_url(), '', $url);
 				$background = ' style="background: url(' . $url[0] . ') no-repeat center center; background-size: cover;" ';
 			}
 
@@ -152,6 +156,11 @@ Description: With three different animation styles, Bamboo Slides allows you to 
 		if( $buttons ) {
 			$html.= "<div class=\"bamboo-slides-prev-button\"><i class=\"fa fa-chevron-circle-left\"></i></div>";
 			$html.= "<div class=\"bamboo-slides-next-button\"><i class=\"fa fa-chevron-circle-right\"></i></div>";
+		}
+
+		// ADD INDICATORS TO THE HTML IF REQUIRED
+		if( $indicators ) {
+			$html.= "<div class=\"bamboo-slides-indicators\"></div>";
 		}
 
 		// FINISH CONSTRUCTING THE HTML

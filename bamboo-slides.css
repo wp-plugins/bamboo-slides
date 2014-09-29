@@ -43,4 +43,18 @@
 	cursor: pointer;
 }
 
+.bamboo-slides-indicators {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	text-align: center;
+}
+
+.bamboo-slides-indicators i {
+	font-size: 20px;
+	color: #ffffff;
+	margin: 0 2px 5px 2px;
+}
+
 /******************************************************************/
