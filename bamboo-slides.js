@@ -66,13 +66,14 @@
 
 			jQuery(window).resize(function(){bambooSlidesResize(index)});
 
-			if(bambooSlideDelay[index]>0) {
-				bambooTimer[index] = window.setInterval(function(){
-					bambooSlidesNextSlide(index);
-				}, bambooSlideDelay[index]*1000);
-			}
-
-			bambooSlidesNextSlide(index);
+			jQuery(window).load(function(){
+				bambooSlidesNextSlide(index);
+				if(bambooSlideDelay[index]>0) {
+					bambooTimer[index] = window.setInterval(function(){
+						bambooSlidesNextSlide(index);
+					}, bambooSlideDelay[index]*1000);
+				}
+			});
 
 		});
 
@@ -94,12 +95,12 @@
 
 			bambooSliding[index] = true;
 			if(bambooInitial[index]) {
-				bambooInitial[index] = false;
 				bambooCurrentSlide[index]++;
 				if(bambooCurrentSlide[index]>bambooSlideCount[index]) {
 					bambooCurrentSlide[index] = 1;
 				}
 				bambooSlidesNextAnimationIn(index);
+				bambooInitial[index] = false;
 			} else {
 				bambooSlidesNextAnimationOut(index);
 				bambooCurrentSlide[index]++;
@@ -193,8 +194,10 @@
 
 		slide.parent().stop(true, false).velocity({'height': slideHeight}, 0);
 
-		switch(bambooSlideMode[index])
-		{
+		var mode = bambooSlideMode[index];
+		if(bambooInitial[index]) mode = 'switch';
+
+		switch(mode) {
 			case 'switch':
 				slide.stop(true, false).velocity({'left': 0}, 0);
 				break;

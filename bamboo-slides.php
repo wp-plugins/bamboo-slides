@@ -5,7 +5,7 @@ Plugin Name:	Bamboo Slides
 Plugin URI:  http://www.bamboosolutions.co.uk/wordpress/bamboo-slides
 Author:      	Bamboo Solutions
 Author URI:	http://www.bamboosolutions.co.uk
-Version:     1.6
+Version:     1.7
 Description: With three different animation styles, Bamboo Slides allows you to incorporate a cool looking interactive banner or slideshow into any page – no coding or Flash required.
 */
 /******************************************************************/
