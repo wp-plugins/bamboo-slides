@@ -5,7 +5,7 @@ Plugin Name:	Bamboo Slides
 Plugin URI:  http://www.bamboosolutions.co.uk/wordpress/bamboo-slides
 Author:      	Bamboo Solutions
 Author URI:	http://www.bamboosolutions.co.uk
-Version:     1.7
+Version:     1.8
 Description: With three different animation styles, Bamboo Slides allows you to incorporate a cool looking interactive banner or slideshow into any page – no coding or Flash required.
 */
 /******************************************************************/
@@ -140,7 +140,6 @@ Description: With three different animation styles, Bamboo Slides allows you to 
 			}
 
 			$html.= do_shortcode( get_the_content() );
-
 			if( $url!='' ) {
 				$html.= "</a>";
 			} else {
@@ -171,13 +170,18 @@ Description: With three different animation styles, Bamboo Slides allows you to 
 
 		// ENQUEUE STYLESHEETS
 		$path = plugins_url( '', __FILE__ );
-		wp_enqueue_style( 'bamboo-font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css' );
-		wp_enqueue_style( 'bamboo-slides', 		 $path.'/bamboo-slides.css' );
+		if( function_exists( 'bamboo_enqueue_style' ) ) {
+			bamboo_enqueue_style( 'bamboo-font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css' );
+			bamboo_enqueue_style( 'bamboo-slides', $path.'/bamboo-slides.min.css' );
+		} else {
+			wp_enqueue_style( 'bamboo-font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css' );
+			wp_enqueue_style( 'bamboo-slides', $path.'/bamboo-slides.min.css' );
+		}
 
         // ENQUEUE JAVASCRIPT
 		wp_enqueue_script( 'jquery' );
-		wp_enqueue_script( 'jquery.velocity', $path.'/jquery.velocity.min.js' );
-		wp_enqueue_script( 'bamboo-slides',	  $path.'/bamboo-slides.js' );
+		wp_enqueue_script( 'jquery.velocity', $path.'/jquery.velocity.min.js', 'jquery', null, true );
+		wp_enqueue_script( 'bamboo-slides', $path.'/bamboo-slides.min.js', 'jquery', null, true );
 
 		// RETURN THE HTML
 		return $html;
