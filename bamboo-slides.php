@@ -1,22 +1,14 @@
 <?php
-/******************************************************************/
+/**************************************************************************************************/
 /*
 Plugin Name:	Bamboo Slides
-Plugin URI:  http://www.bamboosolutions.co.uk/wordpress/bamboo-slides
+Plugin URI:  	http://www.bamboosolutions.co.uk/wordpress/bamboo-slides
 Author:      	Bamboo Solutions
-Author URI:	http://www.bamboosolutions.co.uk
-Version:     1.8
-Description: With three different animation styles, Bamboo Slides allows you to incorporate a cool looking interactive banner or slideshow into any page – no coding or Flash required.
+Author URI:		http://www.bamboosolutions.co.uk
+Version:     	1.9
+Description:	With three different animation styles, Bamboo Slides allows you to incorporate a cool looking interactive banner or slideshow into any page – no coding or Flash required.
 */
-/******************************************************************/
-
-	add_action( 'init', 		'bamboo_slides_init' );
-	add_action( 'admin_init',	'bamboo_slides_admin_init' );
-	add_action( 'save_post',	'bamboo_slides_save_post' );
-
-	add_shortcode( 'bamboo-slides', 'bamboo_slides' );
-
-/******************************************************************/
+/**************************************************************************************************/
 
 	function bamboo_slides_init() {
 
@@ -77,8 +69,44 @@ Description: With three different animation styles, Bamboo Slides allows you to 
 		register_taxonomy_for_object_type( 'bamboo_slide_group', 'bamboo_slide' );
 
 	}
+	add_action( 'init', 'bamboo_slides_init' );
 
-/******************************************************************/
+/**************************************************************************************************/
+
+	function bamboo_slides_admin_init() {
+
+		// ADD THE 'LINK URL', EDITOR TO THE BAMBOO SLIDE POST TYPE
+		add_meta_box( 'link_editor', 'Link URL <em>(leave this blank if there are links in the banner content)</em>', 'bamboo_slides_render_link_editor', 'bamboo_slide', 'normal' );
+
+	}
+	add_action( 'admin_init',	'bamboo_slides_admin_init' );
+
+/**************************************************************************************************/
+
+	function bamboo_slides_save_post() {
+
+		if ( sizeof($_POST)==0 ) {
+			return;
+		}
+
+		if ( !isset( $_POST['post_type'] ) ) {
+			return;
+		}
+
+		if ( 'bamboo_slide' != $_POST['post_type'] ) {
+	        	return;
+	    	}
+
+		// IF THE POST CONTAINS A LINK SAVE THE CONTENT
+        if( isset( $_REQUEST['link_url'] ) ) {
+			update_post_meta( $_REQUEST['post_ID'], 'link_url', $_REQUEST['link_url'] );
+		}
+
+	}
+	add_action( 'save_post',	'bamboo_slides_save_post' );
+
+/**************************************************************************************************/
+
 
 	function bamboo_slides( $atts, $content = null )
 	{
@@ -187,40 +215,9 @@ Description: With three different animation styles, Bamboo Slides allows you to 
 		return $html;
 
 	}
+	add_shortcode( 'bamboo-slides', 'bamboo_slides' );
 
-/******************************************************************/
-
-	function bamboo_slides_admin_init() {
-
-		// ADD THE 'LINK URL', EDITOR TO THE BAMBOO SLIDE POST TYPE
-		add_meta_box( 'link_editor', 'Link URL <em>(leave this blank if there are links in the banner content)</em>', 'bamboo_slides_render_link_editor', 'bamboo_slide', 'normal' );
-
-	}
-
-/******************************************************************/
-
-	function bamboo_slides_save_post() {
-
-		if ( sizeof($_POST)==0 ) {
-			return;
-		}
-
-		if ( !isset( $_POST['post_type'] ) ) {
-			return;
-		}
-
-		if ( 'bamboo_slide' != $_POST['post_type'] ) {
-	        	return;
-	    	}
-
-		// IF THE POST CONTAINS A LINK SAVE THE CONTENT
-        if( isset( $_REQUEST['link_url'] ) ) {
-			update_post_meta( $_REQUEST['post_ID'], 'link_url', $_REQUEST['link_url'] );
-		}
-
-	}
-
-/******************************************************************/
+/**************************************************************************************************/
 
 	function bamboo_slides_render_link_editor() {
 
@@ -233,5 +230,5 @@ Description: With three different animation styles, Bamboo Slides allows you to 
 
 	}
 
-/******************************************************************/
+/**************************************************************************************************/
 ?>
