@@ -5,7 +5,7 @@ Plugin Name:	Bamboo Slides
 Plugin URI:  	http://www.bamboosolutions.co.uk/wordpress/bamboo-slides
 Author:      	Bamboo Solutions
 Author URI:		http://www.bamboosolutions.co.uk
-Version:     	1.9
+Version:     	1.9.1
 Description:	With three different animation styles, Bamboo Slides allows you to incorporate a cool looking interactive banner or slideshow into any page – no coding or Flash required.
 */
 /**************************************************************************************************/
@@ -19,11 +19,11 @@ Description:	With three different animation styles, Bamboo Slides allows you to 
 					'name' 			=> __( 'Bamboo Slide', 	'bamboo' ),
 					'singular_name'	=> __( 'Slide', 			'bamboo' ),
 					'menu_name' 	=> __( 'Bamboo Slides', 'bamboo' ),
-					'all_items' 		=> __( 'All Slides', 	'bamboo' ),
+					'all_items' 	=> __( 'All Slides', 	'bamboo' ),
 					'add_new_item' 	=> __( 'Add New Slide',	'bamboo' ),
-					'edit_item' 		=> __( 'Edit Slide', 	'bamboo' ),
+					'edit_item' 	=> __( 'Edit Slide', 	'bamboo' ),
 					'new_item' 		=> __( 'New Slide', 		'bamboo' ),
-					'view_item' 		=> __( 'View Slide', 	'bamboo' ),
+					'view_item' 	=> __( 'View Slide', 	'bamboo' ),
 					'search_items' 	=> __( 'Search Slides', 	'bamboo' )
 				),
 				'public' 			  	=> true,
@@ -133,9 +133,6 @@ Description:	With three different animation styles, Bamboo Slides allows you to 
 		// PROVIDE AN ACTION HOOK DIRECTLY BEFORE THE SLIDES
 		do_action( 'before_bamboo_slides' );
 
-		// START CONSTRUCTING THE HTML
-		$html = "<div class=\"bamboo-slides color-0 mode-$mode timer-$timer start-$start\" style=\"visibility: hidden;\">";
-
 		// QUERY THE SLIDES
 		$args = array( 'post_type'=>'bamboo_slide', 'orderby'=>'title', 'order'=>'ASC', 'posts_per_page'=>'-1');
 		if( ""!=$group ) {
@@ -143,6 +140,8 @@ Description:	With three different animation styles, Bamboo Slides allows you to 
 		}
 
 		// SLIDES LOOP
+		$html = '';
+		$slide_count = 0;
 		$loop = new WP_Query( $args );
 		while ($loop->have_posts()) : $loop->the_post();
 
@@ -166,7 +165,6 @@ Description:	With three different animation styles, Bamboo Slides allows you to 
 			} else {
 				$html.= "<div class=\"bamboo-slide\"$background>";
 			}
-
 			$html.= do_shortcode( get_the_content() );
 			if( $url!='' ) {
 				$html.= "</a>";
@@ -174,36 +172,46 @@ Description:	With three different animation styles, Bamboo Slides allows you to 
 				$html.= "</div>";
 			}
 
+			// IINCREMENT THE SLIDE COUNT
+			$slide_count++;
+
+		// END OF THE SLIDES LOOP
 		endwhile;
 
 		// RESET THE WP QUERY
 		wp_reset_query();
 
+		// IF THERE IS ONLY ONE SLIDE DISABLE THE TIMER AND RESET THE START SLIDE TO 1
+		if( 2>$slide_count ) {
+			$timer = 0;
+			$start = 1;
+		}
+
 		// ADD BUTTONS TO THE HTML IF REQUIRED
-		if( $buttons ) {
+		if( $buttons && ( 1<$slide_count ) ) {
 			$html.= "<div class=\"bamboo-slides-prev-button\"><i class=\"fa fa-chevron-circle-left\"></i></div>";
 			$html.= "<div class=\"bamboo-slides-next-button\"><i class=\"fa fa-chevron-circle-right\"></i></div>";
 		}
 
 		// ADD INDICATORS TO THE HTML IF REQUIRED
-		if( $indicators ) {
+		if( $indicators && ( 1<$slide_count ) ) {
 			$html.= "<div class=\"bamboo-slides-indicators\"></div>";
 		}
 
-		// FINISH CONSTRUCTING THE HTML
-		$html.= "</div>";
+		// WRAP THE HTML FOR THE SLIDES WITH THE CONTAINER HTML
+		$html = "<div class=\"bamboo-slides color-0 mode-$mode timer-$timer start-$start\" style=\"visibility: hidden;\">$html</div>";
 
-	    	// PROVIDE AN ACTION HOOK DIRECTLY AFTER THE SLIDES
-	    	do_action( 'after_bamboo_slides' );
+    	// PROVIDE AN ACTION HOOK DIRECTLY AFTER THE SLIDES
+    	do_action( 'after_bamboo_slides' );
 
 		// ENQUEUE STYLESHEETS
 		$path = plugins_url( '', __FILE__ );
 		if( function_exists( 'bamboo_enqueue_style' ) ) {
 			bamboo_enqueue_style( 'bamboo-font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css' );
-			bamboo_enqueue_style( 'bamboo-slides', $path.'/bamboo-slides.min.css' );
+			bamboo_enqueue_style( 'bamboo-slides', $path.'/bamboo-slides.css' );
 		} else {
 			wp_enqueue_style( 'bamboo-font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css' );
-			wp_enqueue_style( 'bamboo-slides', $path.'/bamboo-slides.min.css' );
+			wp_enqueue_style( 'bamboo-slides', $path.'/bamboo-slides.css' );
 		}
 
         // ENQUEUE JAVASCRIPT
